@@ -45,9 +45,15 @@ var arquero1 = new Arquero();
 var mago2 = new Mago();
 
 var unoContraUno = function(p1,p2){
+  var whoStarts = Math.round(Math.random());
   do {
-    p1.atacar(p2);
-    p2.atacar(p1);
+    if (whoStarts) {
+      p1.atacar(p2);
+      p2.atacar(p1);
+    } else {
+      p2.atacar(p1);
+      p1.atacar(p2);
+    }
   } while (p1.vida > 0 && p2.vida > 0);
   if (p1.vida > p2.vida) {
     return "ganador: " + p1.nombre;
