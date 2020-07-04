@@ -1,41 +1,36 @@
 class Personaje {
-  constructor(vida, armadura, ataque, nombre) {
-    this.vida = vida;
-    this.armadura = armadura;
-    this.ataque = ataque;
+  constructor(vidamin, vidamax, armaduramin, armaduramax, ataquemin, ataquemax, nombre) {
+    this.vida = Math.round(Math.random() * (vidamax - vidamin) + vidamin);
+    this.armadura = Math.round(Math.random() * (armaduramax - armaduramin) + armaduramin);
+    this.ataque = Math.round(Math.random() * (ataquemax - ataquemin) + ataquemin);
     this.nombre = nombre;
   }
 
   atacar(personaje) {
     personaje.vida = personaje.vida + personaje.armadura - this.ataque;
   }
+
+  primerAtaque(personaje){
+    personaje.vida = personaje.vida + personaje.armadura - (this.ataque * 0,7);
+  }
 }
 
 class Mago extends Personaje {
   constructor() {
-    super(150, 6, 15, "mago");
+    super(100, 200, 3, 9, 10, 20, "mago");
   }
 }
 
 class Caballero extends Personaje {
   constructor() {
-    super(100, 10, 20, "caballero");
+    super(50, 150, 8, 9, 15, 25, "caballero");
   }
 }
 
 class Arquero extends Personaje {
   constructor() {
-    super(80, 6, 20, "Arquero");
+    super(30, 130, 4, 7, 15, 25, "Arquero");
   }
-}
-
-var play = function() {
-  var p1 = new Arquero();
-  var p2 = new Mago();
-
-  // Sistema de turnos
-  p1.atacar(p2);
-  p2.atacar(p1);
 }
 
 
@@ -45,15 +40,29 @@ var arquero1 = new Arquero();
 var mago2 = new Mago();
 
 var unoContraUno = function(p1,p2){
-  do {
-    p1.atacar(p2);
-    p2.atacar(p1);
-  } while (p1.vida > 0 && p2.vida > 0);
-  if (p1.vida > p2.vida) {
-    return "ganador: " + p1.nombre;
-  }else if (p2.vida > p1.vida) {
-    return "ganador: " + p2.nombre;
+  var player1 = null;
+  var player2 = null;
+  var random = Math.round(Math.random());
+  if (random) {
+    player1 = p1;
+    player2 = p2;
   }else {
-    return "empate!";
+    player1 = p2;
+    player2 = p1;
+  }
+  player1.primerAtaque(player2)
+
+  do {
+    player2.atacar(player1);
+    if (player1.vida <= 0 || player2.vida <= 0 ) { break; }
+    player1.atacar(player2);
+  } while (player1.vida > 0 && player2.vida > 0);
+
+  if (player1.vida > player2.vida) {
+    return "ganador: " + player1.nombre;
+  }else if (player2.vida > player1.vida) {
+    return "ganador: " + player2.nombre;
+  }else {
+    return "error!";
   }
 }
